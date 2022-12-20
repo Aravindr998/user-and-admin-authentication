@@ -1,0 +1,76 @@
+.section{
+  height: 100vh !important;
+  background-image: url('images/turquoise-ocean-watercolor-texture-background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+input{
+  border: none;
+  border-bottom: solid 2px rgb(0, 152, 152);
+  transition: border-radius 0.3s, background-color 0.3s;
+  background-color: rgba(255, 255, 255, 0.1); 
+  border-radius: 0.25rem; 
+}
+input:focus{
+  outline: none;
+  background-color: rgba(231, 231, 231, 0.5);
+}
+.form-card{
+  background-color: rgba(255, 255, 255, 0.95);
+}
+@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+  .form-card {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.3);  
+  }
+}
+button{
+  background-color: rgb(0, 109, 109) !important;
+  color: white !important;
+  transition: background-color 0.3s !important;
+}
+button:hover{
+  background-color: rgb(0, 92, 92) !important;
+}
+.navigation{
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+  .navigation {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) !important;
+    background-color: rgba(255, 255, 255, 0.3) !important;  
+  }
+}
+.admin-section{
+  height: 100vh !important;
+  background-image: url('images/Admin\ background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.admin-button{
+  background-color: rgb(109, 0, 0) !important;
+  color: white !important;
+  transition: background-color 0.3s !important;
+}
+.admin-button:hover{
+  background-color: rgb(92, 0, 0) !important;
+}
+.admin-input{
+  border: none;
+  border-bottom: solid 2px rgb(152, 0, 0);
+  transition: border-radius 0.3s, background-color 0.3s;
+  background-color: rgba(255, 255, 255, 0.1); 
+  border-radius: 0.25rem; 
+}
+.admin-input:focus{
+  outline: none;
+  background-color: rgba(231, 231, 231, 0.5);
+}
+.search-bar{
+  border: none !important;
+  border-radius: 2rem;
+  background-color: rgba(255, 255, 255, 0.288);
+  padding: 0.5rem 1rem;
+}

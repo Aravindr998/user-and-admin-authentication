@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head') %> 
+<body>
+  <div class="container-fluid admin-section d-flex justify-content-center align-items-center">
+    <div class="row w-100 justify-content-center">
+      <div class="col-lg-4 col-md-5 col-sm-6">
+        <div class="card rounded-4 form-card">
+          <div class="text-center pt-4 text-white">
+            <h3>Admin Login</h3>
+          </div>
+          <form class="p-5" action="/admin" method="POST">
+            <div>
+              <input type="text" name="username" id="username" class="col-12 admin-input">
+              <label class="pb-4 text-white" for="username">Username</label>
+            </div>
+            <div>
+              <input type="password" name="password" id="password" class="col-12 admin-input">
+              <label class="pb-4 text-white" for="password">Password</label>
+            </div>
+            <button class="btn mb-3 admin-button" type="submit">Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+ </div> 
+</body>
+</html>
