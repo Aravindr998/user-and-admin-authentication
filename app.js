@@ -26,8 +26,8 @@ db.once('open', ()=>{
   console.log("connected succesfully");
 });
 
-const user = "Aravind";
-const pass = "1234";
+// const user = "Aravind";
+// const pass = "1234";
 
 app.set('view engine', 'ejs');
 
@@ -60,16 +60,32 @@ app.get('/', (req, res)=>{
     res.redirect('/login')
   }
 });
-app.post('/', (req, res)=>{
-  if(req.body.username!=user){
+app.post('/', async (req, res)=>{
+  const user = await userModel.find({email: req.body.email})
+  if(user.length == 0){
     res.redirect('/login');
-  }else if(req.body.password!=pass){
+  }else if(req.body.password!=user[0].password){
     res.redirect('/login');
   }else{
-    req.session.username = req.body.username;
+    req.session.username = user[0].fname;
     res.redirect('/');
+    // res.send('hello')
   }
 });
+app.post('/login', async (req, res) =>{
+  const user = new userModel({
+    fname: req.body.fname,
+    lname: req.body.lname,
+    email: req.body.email,
+    password: req.body.password
+  });
+  try{
+    await user.save();
+    res.redirect('/logout');
+  }catch(error){
+    res.status(500).send(error);
+  }
+})
 app.get('/logout', (req, res)=>{
   req.session.destroy();
   res.redirect('/login');
