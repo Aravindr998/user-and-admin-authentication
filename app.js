@@ -1,15 +1,30 @@
 const express = require('express');
 const session = require('express-session');
+const mongoose = require('mongoose');
+const userModel = require('./models/users');
 const registerRouter = require('./router/register');
 const adminRouter = require('./router/admin');
+const { urlencoded } = require('express');
 
 const app = express();
 const PORT = 4000;
+
+app.use(express.json());
+app.use(urlencoded({ extended:false }));
 app.use(session({
   secret: "qerwaiaejgijerg",
   saveUninitialized: true,
   resave: false
 }));
+
+mongoose.set('strictQuery', true);
+mongoose.connect('mongodb://127.0.0.1:27017/userdata')
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, "connection error: "));
+db.once('open', ()=>{
+  console.log("connected succesfully");
+});
 
 const user = "Aravind";
 const pass = "1234";
