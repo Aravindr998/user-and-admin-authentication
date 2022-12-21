@@ -9,23 +9,26 @@
           <div class="text-center pt-4 text-white">
             <h3>Admin Login</h3>
           </div>
-          <form class="p-5" action="/admin" method="POST">
+          <form class="p-5" action="/admin" method="POST" id="form">
             <div>
               <p class="text-danger"><%= message %> </p>
             </div>
-            <div>
-              <input type="text" name="username" id="username" class="col-12 admin-input">
+            <div class="normal">
+              <p class="text-danger" id="username-error"></p>
+              <input type="text" name="username" id="username" class="col-12 admin-input" onfocusout="validateUsername()">
               <label class="pb-4 text-white" for="username">Username</label>
             </div>
-            <div>
-              <input type="password" name="password" id="password" class="col-12 admin-input">
+            <div class="normal">
+              <p class="text-danger" id="password-error"></p>
+              <input type="password" name="password" id="password" class="col-12 admin-input" onfocusout="validatePassword()">
               <label class="pb-4 text-white" for="password">Password</label>
             </div>
-            <button class="btn mb-3 admin-button" type="submit">Login</button>
+            <button class="btn mb-3 admin-button" type="submit" onclick="validateAdminLogin()">Login</button>
           </form>
         </div>
       </div>
     </div>
  </div> 
+ <script src="/script/user-script.js"></script>
 </body>
 </html>

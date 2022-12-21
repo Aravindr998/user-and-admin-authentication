@@ -6,31 +6,36 @@
     <div class="row w-100 justify-content-center">
       <div class="col-lg-5 col-md-6 col-sm-7">
         <div class="card rounded-4 form-card">
-          <form class="p-5 row" action="/login" method="POST">
+          <form class="p-5 row" action="/login" method="POST" id="form">
             <div>
               <p class="text-danger"><%= message %> </p>
             </div>
-            <div class="col-6">
-              <input type="text" name="fname" id="fname" class="col-12">
+            <div class="col-6 normal">
+              <p class="text-danger" id="fname-error"></p>
+              <input type="text" name="fname" id="fname" class="col-12" onfocusout="validateFname()">
               <label class="pb-4 text-white" for="fname">First Name</label>
             </div>
-            <div class="col-6">
-              <input type="text" name="lname" id="lname" class="col-12">
+            <div class="col-6 normal">
+              <p class="text-danger" id="lname-error"></p>
+              <input type="text" name="lname" id="lname" class="col-12" onfocusout="validateLname()">
               <label class="pb-4 text-white" for="lname">Last Name</label>
             </div>
-            <div>
-              <input type="text" name="email" id="email" class="col-12">
+            <div class="normal">
+              <p class="text-danger" id="email-error"></p>
+              <input type="text" name="email" id="email" class="col-12" onfocusout="validateEmail()">
               <label class="pb-4 text-white" for="email">Email Id</label>
             </div>
-            <div>
-              <input type="password" name="password" id="password" class="col-12">
+            <div class="normal">
+              <p class="text-danger" id="password-error"></p>
+              <input type="password" name="password" id="password" class="col-12" onfocusout="validatePassword()">
               <label class="pb-4 text-white" for="password">Password</label>
             </div>
-            <div>
-              <input type="confirm-password"  id="confirm-password" class="col-12">
+            <div class="normal">
+              <p class="text-danger" id="confirm-password-error"></p>
+              <input type="confirm-password"  id="confirm-password" class="col-12" onfocusout="confirmPassword()">
               <label class="pb-4 text-white" for="confirm-password">Confirm Password</label>
             </div>
-            <button class="btn mb-3" type="submit">Register</button>
+            <button class="btn mb-3" type="submit" onclick="validateRegister()">Register</button>
             <div>
             <a class="col-12 text-white" href="/">Already have an account? Log in here</a>
             </div>
@@ -39,6 +44,7 @@
       </div>
     </div>
  </div> 
+ <script src="/script/user-script.js"></script>
   <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>

@@ -74,3 +74,12 @@ button:hover{
   background-color: rgba(255, 255, 255, 0.288);
   padding: 0.5rem 1rem;
 }
+.admin-body{
+  background-color: rgb(63, 0, 0);
+}
+.normal p{
+  display: none ;
+}
+.error p{
+  display: block !important;
+}
