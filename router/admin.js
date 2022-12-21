@@ -133,11 +133,39 @@ router.delete('/:id', async (req, res) => {
 
 router.get('/adduser', (req,res) => {
   if(req.session.loggedin){
-    res.render('');
+    if(req.session.adduser){
+      const message = req.session.adduser;
+      req.session.adduser = "";
+      res.render('admin-adduser', {message});
+    }else{
+      const message = "";
+      res.render('admin-adduser', {message});
+    }
   }else if(req.session.username){
     res.redirect('/');
   }else{
     res.redirect('/admin')
+  }
+})
+
+router.post('/adduser', async (req, res)=>{
+  const existing = await userModel.find({email: req.body.email});
+  if(existing.length == 0){
+    const user = new userModel({
+      fname: req.body.fname,
+      lname: req.body.lname,
+      email: req.body.email,
+      password: req.body.password
+    });
+    try{
+      await user.save();
+      res.redirect('/admin/home');
+    }catch(error){
+      res.status(500).send(error);
+    }
+  }else{
+    req.session.adduser = "User already exists";
+    res.redirect('/admin/adduser')
   }
 })
 
