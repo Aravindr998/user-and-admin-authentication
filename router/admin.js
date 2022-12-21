@@ -86,6 +86,32 @@ router.post('/home', (req, res) => {
   res.redirect('/admin/home');
 })
 
+router.get('/edit/:id', async (req, res) => {
+  const id = req.params.id;
+  try{
+    const users = await userModel.find({_id: id});
+    const user = users[0];
+    res.render('admin-user', {user});
+  }catch(error){
+    console.log(error);
+    res.redirect('/admin')
+  }
+})
+
+router.put('/user/:id', async(req, res)=>{
+  const id = req.params.id;
+  try{
+    const user = await userModel.findOneAndUpdate({_id:id}, {$set: {
+      fname: req.body.fname,
+      lname: req.body.lname,
+      email: req.body.email,
+      password: req.body.password
+    }});
+  }catch(error){
+    console.log(error);
+  }
+})
+
 router.get('/logout', (req, res)=>{
   req.session.destroy();
   res.redirect('/admin')
