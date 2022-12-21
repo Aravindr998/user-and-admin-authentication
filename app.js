@@ -48,7 +48,14 @@ app.get('/login', (req,res)=>{
   }else if(req.session.loggedin){
     res.redirect('/admin')
   }else{
-    res.render('login')
+    if(req.session.message){
+      const message = req.session.message;
+      req.session.message = "";
+      res.render('login', {message});
+    }else{
+      const message = ""
+      res.render('login', {message});
+    }
   }
 });
 app.get('/', (req, res)=>{
@@ -63,8 +70,10 @@ app.get('/', (req, res)=>{
 app.post('/', async (req, res)=>{
   const user = await userModel.find({email: req.body.email})
   if(user.length == 0){
+    req.session.message = "User with given credentials does not exist"
     res.redirect('/login');
   }else if(req.body.password!=user[0].password){
+    req.session.message = "Incorrect Password"
     res.redirect('/login');
   }else{
     req.session.username = user[0].fname;
@@ -72,19 +81,27 @@ app.post('/', async (req, res)=>{
     // res.send('hello')
   }
 });
+//change register so that it prevents duplicate registering
 app.post('/login', async (req, res) =>{
-  const user = new userModel({
-    fname: req.body.fname,
-    lname: req.body.lname,
-    email: req.body.email,
-    password: req.body.password
-  });
-  try{
-    await user.save();
-    res.redirect('/logout');
-  }catch(error){
-    res.status(500).send(error);
+  const existing = await userModel.find({email: req.body.email});
+  if(existing.length == 0){
+    const user = new userModel({
+      fname: req.body.fname,
+      lname: req.body.lname,
+      email: req.body.email,
+      password: req.body.password
+    });
+    try{
+      await user.save();
+      res.redirect('/logout');
+    }catch(error){
+      res.status(500).send(error);
+    }
+  }else{
+    req.session.register = "User already exists. Please sign in";
+    res.redirect('/register')
   }
+  
 })
 app.get('/logout', (req, res)=>{
   req.session.destroy();

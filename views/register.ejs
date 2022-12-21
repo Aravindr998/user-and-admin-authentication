@@ -7,6 +7,9 @@
       <div class="col-lg-5 col-md-6 col-sm-7">
         <div class="card rounded-4 form-card">
           <form class="p-5 row" action="/login" method="POST">
+            <div>
+              <p class="text-danger"><%= message %> </p>
+            </div>
             <div class="col-6">
               <input type="text" name="fname" id="fname" class="col-12">
               <label class="pb-4 text-white" for="fname">First Name</label>

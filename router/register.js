@@ -1,3 +1,4 @@
+const e = require('express');
 const express = require('express');
 const router = express.Router();
 
@@ -10,7 +11,14 @@ router.get('/', (req, res)=>{
   if(req.session.username){
     res.redirect('/')
   }else{
-    res.render('register')
+    if(req.session.register){
+      const message = req.session.register;
+      req.session.register = "";
+      res.render('register', {message});
+    }else{
+      const message = "";
+      res.render('register', {message});
+    }
   }
 });
 module.exports = router;

@@ -1,7 +1,11 @@
 const express = require('express');
 const session = require('express-session');
+const mongoose = require('mongoose');
+const userModel = require('./../models/users');
+const adminModel = require('./../models/admin');
 const router = express.Router();
 
+mongoose.set('strictQuery', true);
 router.use(express.urlencoded({extended:false}));
 router.use(function(req, res, next) {
   res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
@@ -14,8 +18,8 @@ router.use(session({
   resave: false
 }))
 
-const username = "admin";
-const password = "1234";
+// const username = "admin";
+// const password = "1234";
 
 router.get('/', (req, res)=> {
   if(req.session.loggedin){
@@ -23,13 +27,28 @@ router.get('/', (req, res)=> {
   }else if(req.session.username){
     res.redirect('/')
   }else{
-    res.render('admin-login');
+    if(req.session.message){
+      const message = req.session.message;
+      req.session.message="";
+      res.render('admin-login', {message});
+    }else{
+      const message =""
+      res.render('admin-login', {message});
+    }
   }
 });
 
-router.get('/home', (req, res)=>{
+router.get('/home', async (req, res)=>{
+  let users;
+  if(req.session.searchKey!=""){
+    const searchKey = req.session.searchKey;
+    req.session.searchKey="";
+    users = await userModel.find({$or: [{fname: new RegExp(searchKey, 'i')}, {lname: new RegExp(searchKey, 'i')}, {email: new RegExp('^' + searchKey + '$', 'i')}]});
+  }else{
+    users = await userModel.find();
+  }
   if(req.session.loggedin){
-    res.render('admin-home');
+    res.render('admin-home', {users});
   }else if(req.session.username){
     res.redirect('/')
   }else{
@@ -47,16 +66,25 @@ router.get('/user', (req, res)=>{
   }
 });
 
-router.post('/', (req, res)=>{
-  if(req.body.username != username){
+router.post('/', async (req, res)=>{
+  const admin = await adminModel.find({username : req.body.username})
+  // console.log(admin);
+  if(admin.length==0){
+    req.session.message = "Incorrect username"
     res.redirect('/admin');
-  }else if(req.body.password != password){
+  }else if(req.body.password != admin[0].password){
+    req.session.message = "Incorrect password"
     res.redirect('/admin');
   }else{
     req.session.loggedin = true;
     res.redirect('/admin/home')
   }
 });
+
+router.post('/home', (req, res) => {
+  req.session.searchKey = req.body.search;
+  res.redirect('/admin/home');
+})
 
 router.get('/logout', (req, res)=>{
   req.session.destroy();
