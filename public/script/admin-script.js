@@ -14,3 +14,18 @@ function sendUpdateReq(){
     })
   }).then()
 }
+
+function sendDeleteReq(){
+  const data = document.getElementById('delete-button').dataset.url;
+  console.log(data)
+  const url = 'http://localhost:4000/admin/' + data;
+  fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type' : 'application/json'
+    },
+    body: JSON.stringify({
+      id: data
+    })
+  })
+}

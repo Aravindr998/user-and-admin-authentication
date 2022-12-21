@@ -9,7 +9,9 @@ router.use(function(req, res, next) {
 
 router.get('/', (req, res)=>{
   if(req.session.username){
-    res.redirect('/')
+    res.redirect('/');
+  }else if(req.session.loggedin){
+    res.redirect('/admin');
   }else{
     if(req.session.register){
       const message = req.session.register;

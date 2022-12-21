@@ -21,7 +21,8 @@
                 <!-- <button class="btn admin-button" onclick="sendUpdateReq()">Edit</button>
                 <button class="btn admin-button" onclick="sendDeleteReq()">Delete</button> -->
                 <a href="/admin/edit/<%= item._id %>" class="btn admin-button">Edit</a>
-                <a href="/admin/delete"class="btn admin-button">Delete</a>
+                <!-- <a href="/admin/delete"class="btn admin-button">Delete</a> -->
+                <!-- <button class="btn admin-button" id="delete-button" onclick="sendDeleteReq()" data-url="<%= item._id %>">Delete</button> -->
               </div>
             </div>
           </div>
@@ -33,6 +34,7 @@
       <% } %>  
     </div>
   </section>
+  <a href="" class="btn admin-button position-fixed bottom-0 end-0 m-3">Add User</a>
  </section>
  <script src="./script/admin-script.js"></script>
   <!-- JavaScript Bundle with Popper -->

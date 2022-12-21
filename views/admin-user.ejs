@@ -29,6 +29,7 @@
             <label class="pb-4 text-white" for="confirm-password">Confirm Password</label>
           </div>
           <button class="btn admin-button mb-3" id="change-button" onclick="sendUpdateReq()" data-url="<%= user._id %>">Save Changes</button>
+          <button class="btn admin-button mb-3" id="delete-button" onclick ="sendDeleteReq()" data-url="<%= user._id %>">Delete User</button>
           <div>
         </form>
       </div>
