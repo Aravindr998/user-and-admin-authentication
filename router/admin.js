@@ -3,7 +3,6 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const userModel = require('./../models/users');
 const adminModel = require('./../models/admin');
-const e = require('express');
 const router = express.Router();
 
 mongoose.set('strictQuery', true);
@@ -57,16 +56,6 @@ router.get('/home', async (req, res)=>{
   }
 });
 
-router.get('/user', (req, res)=>{
-  if(req.session.loggedin){
-    res.render('admin-user');
-  }else if(req.session.username){
-    res.redirect('/')
-  }else{
-    res.redirect('/admin');
-  }
-});
-
 router.post('/', async (req, res)=>{
   const admin = await adminModel.find({username : req.body.username})
   // console.log(admin);
@@ -89,18 +78,25 @@ router.post('/home', (req, res) => {
 
 router.get('/edit/:id', async (req, res) => {
   const id = req.params.id;
-  try{
-    const users = await userModel.find({_id: id});
-    const user = users[0];
-    if(users.length>0){
-      res.render('admin-user', {user});
-    }else{
-      res.redirect('/admin')
+  if(req.session.loggedin){
+    try{
+      const users = await userModel.find({_id: id});
+      const user = users[0];
+      if(users.length>0){
+        res.render('admin-user', {user});
+      }else{
+        res.redirect('/admin');
+      }
+    }catch(error){
+      console.log(error);
+      res.redirect('/admin');
     }
-  }catch(error){
-    console.log(error);
+  }else if(req.session.username){
+    res.redirect('/')
+  }else{
     res.redirect('/admin')
   }
+  
 })
 
 router.put('/user/:id', async(req, res)=>{
@@ -111,8 +107,10 @@ router.put('/user/:id', async(req, res)=>{
       lname: req.body.lname,
       email: req.body.email,
       password: req.body.password
-    }});
-    res.redirect('/admin/home')
+    }})
+    .then(result => {
+      res.json({redirect: '/admin/home'})
+    })
   }catch(error){
     console.log(error);
   }
@@ -121,13 +119,13 @@ router.put('/user/:id', async(req, res)=>{
 router.delete('/:id', async (req, res) => {
   console.log("hello")
   const id = req.params.id;
-  console.log(id)
   try{
-    const user = await userModel.findOneAndDelete({_id: id});
-    console.log(user);
-    res.redirect('/admin');
+    const user = await userModel.findOneAndDelete({_id: id})
+    .then(result => {
+      res.json({redirect: '/admin/home'})
+    })
   }catch(error){
-    console.log(error)
+    console.log(error);
   }
 })
 
@@ -144,7 +142,7 @@ router.get('/adduser', (req,res) => {
   }else if(req.session.username){
     res.redirect('/');
   }else{
-    res.redirect('/admin')
+    res.redirect('/admin');
   }
 })
 
@@ -165,13 +163,17 @@ router.post('/adduser', async (req, res)=>{
     }
   }else{
     req.session.adduser = "User already exists";
-    res.redirect('/admin/adduser')
+    res.redirect('/admin/adduser');
   }
 })
 
 router.get('/logout', (req, res)=>{
-  req.session.destroy();
-  res.redirect('/admin')
+  if(req.session.username){
+    res.redirect('/');
+  }else{
+    req.session.destroy();
+    res.redirect('/admin');
+  }
 })
 
 

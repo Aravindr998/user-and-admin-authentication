@@ -4,13 +4,12 @@ const mongoose = require('mongoose');
 const userModel = require('./models/users');
 const registerRouter = require('./router/register');
 const adminRouter = require('./router/admin');
-const { urlencoded } = require('express');
 
 const app = express();
 const PORT = 4000;
 
 app.use(express.json());
-app.use(urlencoded({ extended:false }));
+app.use(express.urlencoded({ extended:false }));
 app.use(session({
   secret: "qerwaiaejgijerg",
   saveUninitialized: true,
@@ -19,6 +18,12 @@ app.use(session({
 
 mongoose.set('strictQuery', true);
 mongoose.connect('mongodb://127.0.0.1:27017/userdata')
+.then(app.listen(PORT, ()=>{
+  console.log(`server is listening on port ${PORT}`);
+}))
+.catch(error => {
+  console.log(`Couldn't connect to database`);
+})
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, "connection error: "));
@@ -44,7 +49,8 @@ app.use(function(req, res, next) {
 
 app.get('/login', (req,res)=>{
   if(req.session.username){
-    res.render('home')
+    const name = req.session.username;
+    res.render('home', {name})
   }else if(req.session.loggedin){
     res.redirect('/admin')
   }else{
@@ -60,7 +66,8 @@ app.get('/login', (req,res)=>{
 });
 app.get('/', (req, res)=>{
   if(req.session.username){
-    res.render('home')
+    const name = req.session.username;
+    res.render('home', {name})
   }else if(req.session.loggedin){
     res.redirect('/admin')
   }else{
@@ -104,10 +111,11 @@ app.post('/login', async (req, res) =>{
   
 })
 app.get('/logout', (req, res)=>{
-  req.session.destroy();
-  res.redirect('/login');
+  if(req.session.loggedin){
+    res.redirect('/admin/home')
+  }else{
+    req.session.destroy();
+    res.redirect('/login');
+  }
 });
 
-app.listen(PORT, ()=>{
-  console.log(`server is listening on port ${PORT}`);
-});
