@@ -101,19 +101,24 @@ router.get('/edit/:id', async (req, res) => {
 
 router.put('/user/:id', async(req, res)=>{
   const id = req.params.id;
-  try{
-    const user = await userModel.findOneAndUpdate({_id:id}, {$set: {
-      fname: req.body.fname,
-      lname: req.body.lname,
-      email: req.body.email,
-      password: req.body.password
-    }})
-    .then(result => {
-      res.json({redirect: '/admin/home'})
-    })
-  }catch(error){
-    console.log(error);
-  }
+  const existing = await userModel.find({_id: id})
+  if(existing.length==0){
+    try{
+      const user = await userModel.findOneAndUpdate({_id:id}, {$set: {
+        fname: req.body.fname,
+        lname: req.body.lname,
+        email: req.body.email,
+        password: req.body.password
+      }})
+      .then(result => {
+        res.json({redirect: '/admin/home'})
+      })
+    }catch(error){
+      console.log(error);
+    }
+  }else{
+    res.json({redirect: '/admin/home'})
+  } 
 })
 
 router.delete('/:id', async (req, res) => {
