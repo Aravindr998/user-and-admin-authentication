@@ -1,5 +1,6 @@
 function sendUpdateReq(){
-  const data = document.getElementById('change-button').dataset.url;
+  if(isFormValid() == true){
+    const data = document.getElementById('change-button').dataset.url;
   const url = 'http://localhost:4000/admin/user/' + data;
   fetch(url, {
     method: 'PUT',
@@ -15,6 +16,8 @@ function sendUpdateReq(){
   }).then((response)=> response.json())
   .then(data => window.location.href = data.redirect)
   .catch(err => console.log(err));
+  }
+  
 }
 
 function sendDeleteReq(){
