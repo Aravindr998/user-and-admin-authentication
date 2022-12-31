@@ -49,8 +49,7 @@ app.use(function(req, res, next) {
 
 app.get('/login', (req,res)=>{
   if(req.session.username){
-    const name = req.session.username;
-    res.render('home', {name})
+    res.redirect('/')
   }else if(req.session.loggedin){
     res.redirect('/admin')
   }else{
